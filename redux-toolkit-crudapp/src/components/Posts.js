@@ -2,36 +2,47 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
-import { deletePost, getPost } from "../redux/features/PostSlice";
-
-
+import {
+  deletePost,
+  getPost,
+  setEdit,
+  updatePost,
+} from "../redux/features/PostSlice";
 
 export const Posts = () => {
-  const [id,setId]= useState('');
-  const {loading,post}= useSelector(state=>({...state.app}))
+  const [id, setId] = useState("");
+  const [textbody, setTextBody] = useState("");
+  const { loading, post, body, edit } = useSelector((state) => ({
+    ...state.app,
+  }));
 
-  const navigate=useNavigate();
-  const dispatch= useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleFetchData=(e)=>{
+  const handleFetchData = (e) => {
     e.preventDefault();
-     if(!id){
-      window.alert('Please provide the right id')
-     }else{
-      dispatch(getPost({id}))
+    if (!id) {
+      window.alert("Please provide the right id");
+    } else {
+      dispatch(getPost({ id }));
       setId("");
-     }
-  }
+    }
+  };
 
-  const handleDelete=({id})=>{
-    dispatch(deletePost({id:post[0].id}))
-    window.alert('Post deleted');
+  const handleDelete = ({ id }) => {
+    dispatch(deletePost({ id: post[0].id }));
+    window.alert("Post deleted");
+  };
 
-  }
+  useEffect(() => {
+    if (body) {
+      setTextBody(body);
+    }
+  }, [body]);
 
   return (
     <>
-          <div className="row mt-4 d-flex align-items-center justify-content-center">
+      <div className="row mt-4 d-flex align-items-center justify-content-center">
         <div className="col-md-8">
           <form action="">
             <div className="mb-3">
@@ -65,28 +76,84 @@ export const Posts = () => {
         </div>
       </div>
       <div className="container">
-        {
-          loading?<Spinner/>:(
-            <>
-            {post.length>0?(
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {post.length > 0 ? (
               <>
-               <div className="card mt-4">
+                <div className="card mt-4">
                   <div className="card-body">
                     <h5 className="card-title">{post[0].title}</h5>
-                       <p className="card-text">{post[0].body}</p>
-                       <div className="d-flex align-items-end justify-content-end">
-                       <button className="btn btn-primary" >Edit</button>
-                       <button className="btn btn-danger ms-4" 
-                       onClick={handleDelete}>Delete</button>
-                       </div>
-                    </div>
-                    </div>
+                    {edit ? (
+                      <>
+                        <textarea
+                          className="form-control"
+                          value={textbody}
+                          onChange={(e) => setTextBody(e.target.value)}
+                          id="floatingTextarea"
+                        />
+                        <div className="d-flex align-items-end justify-content-end">
+                          <button
+                            className="btn btn-primary"
+                            onClick={() =>
+                              dispatch(setEdit({ edit: false, body: "" }))
+                            }
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="btn btn-danger ms-4"
+                            onClick={() => {
+                              dispatch(
+                                updatePost({
+                                  id: post[0].id,
+                                  title: post[0].title,
+                                  body: textbody,
+                                })
+                              );
+                              dispatch(setEdit({ edit: false, body: "" }));
+                            }}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="card-text">{post[0].body}</p>
+                      </>
+                    )}
+
+                    {!edit && (
+                      <>
+                        <div className="d-flex align-items-end justify-content-end">
+                          <button
+                            className="btn btn-primary"
+                            onClick={() =>
+                              dispatch(
+                                setEdit({ edit: true, body: post[0].body })
+                              )
+                            }
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-danger ms-4"
+                            onClick={handleDelete}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               </>
-            ):(null)}
-            </>
-          )
-        }
+            ) : null}
+          </>
+        )}
       </div>
     </>
-  )
-}
+  );
+};

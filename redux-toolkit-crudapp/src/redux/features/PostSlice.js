@@ -2,13 +2,13 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 
 
-export const getPost=createAsyncThunk('posts/getPosts',async({id})=>{
+export const getPost=createAsyncThunk('post/getPost',async({id})=>{
    return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
    .then(res=>res.json())
 })
 
 
-export const deletePost=createAsyncThunk('posts/getPosts',async({id})=>{
+export const deletePost=createAsyncThunk('post/deletePost',async({id})=>{
     return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`,{
         method:'DELETE',
     })
@@ -16,8 +16,8 @@ export const deletePost=createAsyncThunk('posts/getPosts',async({id})=>{
  })
 
  
-export const createPost=createAsyncThunk('posts/getPosts',async({values})=>{
-    return fetch(`https://jsonplaceholder.typicode.com/posts/`,{
+export const createPost=createAsyncThunk('post/createPost',async({values})=>{
+    return fetch(`https://jsonplaceholder.typicode.com/posts`,{
         method:'POST',
         headers:{
             Accept:'application/json',
@@ -30,6 +30,22 @@ export const createPost=createAsyncThunk('posts/getPosts',async({values})=>{
     })
     .then(res=>res.json())
  })
+
+ 
+export const updatePost=createAsyncThunk('post/updatePost',async({id,title,body})=>{
+    return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`,{
+        method:'PUT',
+        headers:{
+            Accept:'application/json',
+            'content-type':'application/json'
+        },
+        body:JSON.stringify({
+            title,
+            body,
+        }),
+    })
+    .then(res=>res.json())
+ })
  
  
 
@@ -39,11 +55,19 @@ const PostSlice= createSlice({
         loading:false,
         post:[],
         error:null,
+        body:"",
+        edit:false
 
+    },
+    reducer:{
+        setEdit:(state,action)=>{
+            state.edit=action.payload.edit;
+           state.body= action.payload.body;
+        },
     },
     extraReducers:{
         [getPost.pending]:(state,action)=>{
-            state.loading=true
+            state.loading=true;
         },
         [getPost.fulfilled]:(state,action)=>{
             state.loading=false;
@@ -75,7 +99,19 @@ const PostSlice= createSlice({
             state.loading=false;
             state.error=action.payload
         },
-    }
-})
+        [updatePost.pending]:(state,action)=>{
+            state.loading=true
+        },
+        [updatePost.fulfilled]:(state,action)=>{
+            state.loading=false;
+            state.post=[action.payload];
+        },
+        [updatePost.rejected]:(state,action)=>{
+            state.loading=false;
+            state.error=action.payload;
+        },
+    },
+});
 
+export const {setEdit}= PostSlice.actions;
 export default PostSlice.reducer;

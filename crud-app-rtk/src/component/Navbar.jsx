@@ -28,7 +28,7 @@ const Navbar = () => {
               </li>
              
               <li className="nav-item dropdown">
-                <a href="#" className="nav-link active" >All Post</a>
+                <NavLink to="/alluser" className="nav-link active" >All Post</NavLink>
               </li>
               
             </ul>

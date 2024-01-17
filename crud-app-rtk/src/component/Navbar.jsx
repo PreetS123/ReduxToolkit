@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
+  const allUsers= useSelector((store)=>store.app.users);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -28,7 +31,7 @@ const Navbar = () => {
               </li>
              
               <li className="nav-item dropdown">
-                <NavLink to="/alluser" className="nav-link active" >All Post</NavLink>
+                <NavLink to="/alluser" className="nav-link active" >All Post ({allUsers.length})</NavLink>
               </li>
               
             </ul>

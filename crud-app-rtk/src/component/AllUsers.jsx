@@ -1,13 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from "../features/userDetailsSlice";
+import CustomModal from "./customModal/CustomModal";
 
 const AllUsers = () => {
   const { loading, users } = useSelector((store) => store.app);
   const dispatch = useDispatch();
+  const [editId, setEditId] = useState("");
+  const [deleteId, setDeleteId] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
   useEffect(() => {
     dispatch(getAllUsers());
   }, []);
+
+  const handleEditClick = (rowId) => {
+    console.log("edit", editId);
+    setShowPopup(true);
+    setEditId(rowId);
+  };
+  const handleDeleteClick = (rowId) => {
+    console.log("delete", rowId);
+    setDeleteId(rowId)
+    setShowPopup(true);
+  };
 
   if (loading)
     return (
@@ -32,44 +47,28 @@ const AllUsers = () => {
                     <p className="card-text">Age:{user.age}</p>
                     <p className="card-text">Gender: {user.gender}</p>
                   </div>
-                  <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="btn btn-danger m-2">Delete</button>
-                  <button className="btn btn-link m-1 border">Edit</button>
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    className="btn btn-danger m-2"
+                    onClick={() => handleDeleteClick(user.id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-link m-1 border"
+                    onClick={() => handleEditClick(user.id)}
+                  >
+                    Edit
+                  </button>
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-           <div className="modal-body">
-              Are you sure you want to delete this data?
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" className="btn btn-danger">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {showPopup ? <CustomModal showPopup={showPopup} setShowPopup={setShowPopup} id={deleteId} /> : ""}
     </>
   );
 };

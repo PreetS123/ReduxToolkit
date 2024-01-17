@@ -7,7 +7,7 @@ const CustomModal = ({ id, showPopup, setShowPopup }) => {
   const allUser = useSelector((store) => store.app.users);
   const singleUser = allUser.filter((el) => el.id === id);
   const dispatch= useDispatch();
-  // console.log(singleUser);
+  // console.log(singleUser);  
   const handleDelete=()=>{
     dispatch(deleteUser(id))
     dispatch(getAllUsers())

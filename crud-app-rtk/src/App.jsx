@@ -1,10 +1,16 @@
 import './App.css'
+import Create from './component/Create'
+import Navbar from './component/Navbar'
+import {Routes, Route} from "react-router-dom";
 
 function App() {
 
   return (
     <div>
-     <h1>Welcome to our app</h1>
+    <Navbar/>
+    <Routes>
+    <Route exact path="/create" element={<Create/>} />
+    </Routes>
     </div>
   )
 }

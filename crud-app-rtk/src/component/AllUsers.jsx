@@ -27,15 +27,22 @@ const AllUsers = () => {
     
   useEffect(() => {
     if (searchCurr.length > 0) {
-      console.log(searchCurr);
+      // console.log(searchCurr);
       const filtered = users.filter((el) =>
         el.name.toLowerCase().includes(searchCurr)
       );
-      console.log("filtered",filtered);
+      // console.log("filtered",filtered);
       setFilteredData(filtered);
     }
   }, [searchCurr]);
   // console.log('1',searchCurr);
+
+  const handleFilterClick=(btnText)=>{
+     if(btnText){
+      const filtered= users.filter((el)=>el.gender.toLowerCase()==btnText.toLowerCase());
+      setFilteredData(filtered);
+     }
+  }
 
   const handleEditClick = (rowId) => {
     navigate(`/edit/${rowId}`);
@@ -57,8 +64,9 @@ const AllUsers = () => {
     <>
       <div>
         <h2>All Data</h2>
-        <div>
-          <button></button>
+        <div className="d-flex gap-2">
+          <button className="btn rounded-1" onClick={()=>handleFilterClick("female")}>Female</button>
+          <button className="btn rounded-1" onClick={()=>handleFilterClick("male")}>Male</button>
         </div>
         <div className="d-flex flex-wrap gap-1 w-100">
           {filteredData &&

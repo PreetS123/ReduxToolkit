@@ -1,8 +1,21 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { searchUser } from "../features/userDetailsSlice";
 
 const Navbar = () => {
   const allUsers= useSelector((store)=>store.app.users);
+  const dispatch= useDispatch();
+   const [search,setSearch]= useState("")
+  const handleSearch=(e)=>{
+   let sval=e.target.value;
+   setSearch(sval.toLowerCase());
+  //  console.log(sval);
+  }
+
+  useEffect(()=>{
+    dispatch(searchUser(search));
+  },[search])
 
   return (
     <>
@@ -40,7 +53,7 @@ const Navbar = () => {
                 className="form-control me-2"
                 type="search"
                 placeholder="Search"
-                aria-label="Search"
+                onChange={handleSearch}
               />
             </form>
           </div>

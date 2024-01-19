@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   users: [],
+  searchQuery:[],
 };
 
 // create user
@@ -73,10 +74,32 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+// update users
+export const updateUser= createAsyncThunk("updateUser", async(update,{rejectWithValue})=>{
+  try{
+    const response= await fetch(`https://65a3f08aa54d8e805ed43c94.mockapi.io/todo/${update.id}`,{
+      method:"PUT",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(update),
+    })
+    const result= await response.json();
+    // console.log("res",result);
+    return result;
+  }catch(err){
+    return rejectWithValue(err.message);
+  }
+})
 export const userDetail = createSlice({
   name: "User details",
   initialState,
-  reducer: {},
+  reducers: {
+    searchUser:(state,action)=>{
+      // console.log('redux',action.payload);
+      state.searchQuery= action.payload;
+    }
+  },
   extraReducers: {
     [createUser.pending]: (state) => {
       state.loading = true;
@@ -114,7 +137,20 @@ export const userDetail = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
+    [updateUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [updateUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.users = state.users?.map((el)=>el.id === action.payload.id?action.payload:el)
+    },
+    [updateUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
 export default userDetail.reducer;
+
+export const {searchUser} = userDetail.actions;

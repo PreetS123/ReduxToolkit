@@ -64,9 +64,9 @@ const AllUsers = () => {
     <>
       <div>
         <h2>All Data</h2>
-        <div className="d-flex gap-2">
-          <button className="btn rounded-1" onClick={()=>handleFilterClick("female")}>Female</button>
-          <button className="btn rounded-1" onClick={()=>handleFilterClick("male")}>Male</button>
+        <div className="d-flex gap-2 justify-content-center align-items-center m-3">
+          <button className="btn rounded-1 border" onClick={()=>handleFilterClick("female")}>Female</button>
+          <button className="btn rounded-1 border" onClick={()=>handleFilterClick("male")}>Male</button>
         </div>
         <div className="d-flex flex-wrap gap-1 w-100">
           {filteredData &&

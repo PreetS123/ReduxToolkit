@@ -9,7 +9,7 @@ const Update = () => {
   const dispatch= useDispatch();
   const navigate= useNavigate();
   const [updateState, setUpdateState] = useState([]);
-  console.log(updateState);
+  // console.log(updateState);
   useEffect(() => {
     let singleUser = users.filter((el) => el.id === id);
     setUpdateState(singleUser[0]);

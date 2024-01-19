@@ -48,7 +48,7 @@ const AllUsers = () => {
     navigate(`/edit/${rowId}`);
   };
   const handleDeleteClick = (rowId) => {
-    console.log("delete", rowId);
+    // console.log("delete", rowId);
     setDeleteId(rowId);
     setShowPopup(true);
   };

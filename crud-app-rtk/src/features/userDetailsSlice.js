@@ -4,7 +4,7 @@ const initialState = {
   loading: false,
   error: null,
   users: [],
-  searchQuery:[],
+  searchQuery: [],
 };
 
 // create user
@@ -75,30 +75,36 @@ export const deleteUser = createAsyncThunk(
 );
 
 // update users
-export const updateUser= createAsyncThunk("updateUser", async(update,{rejectWithValue})=>{
-  try{
-    const response= await fetch(`https://65a3f08aa54d8e805ed43c94.mockapi.io/todo/${update.id}`,{
-      method:"PUT",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(update),
-    })
-    const result= await response.json();
-    // console.log("res",result);
-    return result;
-  }catch(err){
-    return rejectWithValue(err.message);
+export const updateUser = createAsyncThunk(
+  "updateUser",
+  async (update, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        `https://65a3f08aa54d8e805ed43c94.mockapi.io/todo/${update.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(update),
+        }
+      );
+      const result = await response.json();
+      // console.log("res",result);
+      return result;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
   }
-})
+);
 export const userDetail = createSlice({
   name: "User details",
   initialState,
   reducers: {
-    searchUser:(state,action)=>{
+    searchUser: (state, action) => {
       // console.log('redux',action.payload);
-      state.searchQuery= action.payload;
-    }
+      state.searchQuery = action.payload;
+    },
   },
   extraReducers: {
     [createUser.pending]: (state) => {
@@ -142,7 +148,9 @@ export const userDetail = createSlice({
     },
     [updateUser.fulfilled]: (state, action) => {
       state.loading = false;
-      state.users = state.users?.map((el)=>el.id === action.payload.id?action.payload:el)
+      state.users = state.users?.map((el) =>
+        el.id === action.payload.id ? action.payload : el
+      );
     },
     [updateUser.rejected]: (state, action) => {
       state.loading = false;
@@ -153,4 +161,4 @@ export const userDetail = createSlice({
 
 export default userDetail.reducer;
 
-export const {searchUser} = userDetail.actions;
+export const { searchUser } = userDetail.actions;

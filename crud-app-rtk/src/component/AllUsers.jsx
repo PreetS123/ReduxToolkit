@@ -24,12 +24,15 @@ const AllUsers = () => {
   useEffect(() => {
     setSearchCurr(searchQuery);
   }, [searchQuery]);
-    
+
   useEffect(() => {
     if (searchCurr.length > 0) {
       // console.log(searchCurr);
       const filtered = users.filter((el) =>
-        el.name.toLowerCase().includes(searchCurr)
+        el.name.toLowerCase().includes(searchCurr) || 
+        el.age.toString().includes(searchCurr) ||
+        el.email.toLowerCase().includes(searchCurr) ||
+        el.gender.toLowerCase()===searchCurr.toLowerCase()
       );
       // console.log("filtered",filtered);
       setFilteredData(filtered);
@@ -37,12 +40,14 @@ const AllUsers = () => {
   }, [searchCurr]);
   // console.log('1',searchCurr);
 
-  const handleFilterClick=(btnText)=>{
-     if(btnText){
-      const filtered= users.filter((el)=>el.gender.toLowerCase()==btnText.toLowerCase());
+  const handleFilterClick = (btnText) => {
+    if (btnText) {
+      const filtered = users.filter(
+        (el) => el.gender.toLowerCase() == btnText.toLowerCase()
+      );
       setFilteredData(filtered);
-     }
-  }
+    }
+  };
 
   const handleEditClick = (rowId) => {
     navigate(`/edit/${rowId}`);
@@ -65,8 +70,18 @@ const AllUsers = () => {
       <div>
         <h2>All Data</h2>
         <div className="d-flex gap-2 justify-content-center align-items-center m-3">
-          <button className="btn rounded-1 border" onClick={()=>handleFilterClick("female")}>Female</button>
-          <button className="btn rounded-1 border" onClick={()=>handleFilterClick("male")}>Male</button>
+          <button
+            className="btn rounded-1 border"
+            onClick={() => handleFilterClick("female")}
+          >
+            Female
+          </button>
+          <button
+            className="btn rounded-1 border"
+            onClick={() => handleFilterClick("male")}
+          >
+            Male
+          </button>
         </div>
         <div className="d-flex flex-wrap gap-1 w-100">
           {filteredData &&

@@ -6,8 +6,8 @@ import { updateUser } from "../features/userDetailsSlice";
 const Update = () => {
   const { id } = useParams();
   const { users, loading } = useSelector((store) => store.app);
-  const dispatch= useDispatch();
-  const navigate= useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [updateState, setUpdateState] = useState([]);
   // console.log(updateState);
   useEffect(() => {
@@ -20,7 +20,7 @@ const Update = () => {
     navigate("/alluser");
   };
   const getInputValue = (e) => {
-    setUpdateState({...updateState,[e.target.name]:e.target.value});
+    setUpdateState({ ...updateState, [e.target.name]: e.target.value });
   };
 
   if (loading) {
@@ -33,9 +33,7 @@ const Update = () => {
   return (
     <>
       <div>
-        <form 
-        onSubmit={onFormSubmit} 
-        className="w-50 m-auto border p-3 mt-4">
+        <form onSubmit={onFormSubmit} className="w-50 m-auto border p-3 mt-4">
           <div className="d-flex mb-3">
             <label htmlFor="exampleInputName1" className="form-label col-md-3">
               Name
